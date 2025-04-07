@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 from collections import defaultdict
 
 # Load and parse use flags from file
@@ -94,7 +94,24 @@ class UseFlagViewer:
 
 if __name__ == '__main__':
     import os
-    filepath = os.path.join(os.path.dirname(__file__), input('Enter filename of useflag file: '))
+    import sys
+
+    filepath = None
+    try:
+        root = tk.Tk()
+        root.withdraw()  # Hide main window during file prompt
+        filepath = filedialog.askopenfilename(
+            title="Select useflags.txt",
+            filetypes=[("Text Files", "*.txt"), ("All Files", "*")]
+        )
+        root.destroy()
+    except Exception:
+        pass
+
+    if not filepath:
+        default_path = os.path.join(os.path.dirname(__file__), 'useflags.txt')
+        filepath = input(f"Enter path to useflags.txt (leave empty to use default: {default_path}): ") or default_path
+
     flag_data = load_useflags(filepath)
 
     root = tk.Tk()
